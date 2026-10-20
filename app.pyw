@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 import configparser
 
 # Версия программного комплекса и контакты разработчика
-VERSION = "5.5.2"
+VERSION = "5.5.3"
 CONTACT_EMAIL = "ADmin@TkYD.ru"
 CONTACT_GITHUB = "ADmin-TkYD"
 # Дефолтный период поиска в месяцах (при отсутствии config.ini)
@@ -503,8 +503,13 @@ def universal_paste(event=None):
         except tk.TclError: pass
         return "break"
 
+def show_context_menu(event):
+    menu = tk.Menu(root, tearoff=0)
+    menu.add_command(label="Вставить", command=universal_paste)
+    menu.post(event.x_root, event.y_root)
+
 entry_search.bind("<Control-KeyPress>", universal_paste)
-entry_search.bind("<Button-3>", lambda e: tk.Menu(root, tearoff=0).add_command(label="Вставить", command=universal_paste).post(e.x_root, e.y_root))
+entry_search.bind("<Button-3>", show_context_menu)
 
 threading.Thread(target=update_database, daemon=True).start()
 root.mainloop()
